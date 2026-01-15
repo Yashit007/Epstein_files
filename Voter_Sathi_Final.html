@@ -689,11 +689,24 @@
                 feed_txt[i].innerHTML = `${dscr}`
                 if (response.results[i].image_url == null) {
                     feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                    console.log('No link found')
+                } else {
+                    try { //try catch dose not work
+                        feed_img[i].setAttribute('src', response.results[i].image_url)
+                        console.log('Link found')
+                    } catch (e) {
+                        console.log(e, 'Link error catched')
+                        feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                    }
+                    
                 }
-                else {
-                    console.log("Image embbeded")
-                    feed_img[i].setAttribute('src', response.results[i].image_url)
-                }
+                // if (response.results[i].image_url == null) {
+                //     feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                // }
+                // else {
+                //     console.log("Image embbeded")
+                //     feed_img[i].setAttribute('src', response.results[i].image_url)
+                // }
             }
         }).catch(err => {
             console.log(err)
