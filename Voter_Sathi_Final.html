@@ -669,7 +669,7 @@
         let feed_img = document.getElementsByClassName("fed-img")
         let err_box = document.getElementById("messages")
 
-        let API = fetch("https://newsdata.io/api/1/news?apikey=pub_34415989be7674bd02b4229349ee94d34a482&country=in&language=en&category=politics ")
+        let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
 
         API.then(response => {
             return response.json()
@@ -685,7 +685,7 @@
             }
 
             for (i = 0; i < feed.length; i++) {
-                let dscr = response.results[i].content
+                let dscr = response.results[i].description
                 feed_txt[i].innerHTML = `${dscr}`
                 if (response.results[i].image_url == null) {
                     feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
