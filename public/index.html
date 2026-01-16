@@ -669,7 +669,7 @@
         let feed_img = document.getElementsByClassName("fed-img")
         let err_box = document.getElementById("messages")
 
-        let API = fetch("https://news.knowivate.com/api/latest")
+        let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
 
         API.then(response => {
             return response.json()
