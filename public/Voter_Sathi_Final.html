@@ -669,30 +669,34 @@
         let feed_img = document.getElementsByClassName("fed-img")
         let err_box = document.getElementById("messages")
 
-        let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
-
+        // let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
+        let API = fetch("/news")
+        let status;
         API.then(response => {
+            status = response.status
+            console.log(status)
             return response.json()
         }).then(response => {
             console.log(response);
 
-            if (response.status == 'error') {
+            if (response.error) {
                 console.log("ERROR : :");
                 err_box.innerHTML = err_box.innerHTML + `<div class="fs-5 alert alert-danger alert-dismissible fade show m-3" role="alert">
-        <strong>FEED ERROR :( </strong> This error is caused due to traffic on feed server. Try again later. Error code:429 .
+        <strong>FEED ERROR :( </strong> Cause: ${response.error} [ status code: ${status} ] <button style="color: blue; margin-left: 2px; text-decoration: underline;" type="button" onclick="location.reload()" >Refresh page</button>
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>`
             }
 
             for (i = 0; i < feed.length; i++) {
-                let dscr = response.results[i].description
+                let dscr = response.news[i].description
                 feed_txt[i].innerHTML = `${dscr}`
-                if (response.results[i].image_url == null) {
-                    feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+
+                if (response.news[i].urlToImage == null) {
                     console.log('No link found')
                 } else {
                     try { //try catch dose not work
-                        feed_img[i].setAttribute('src', response.results[i].image_url)
+                        feed_img[i].setAttribute('src', response.news[i].urlToImage)
                         console.log('Link found')
                     } catch (e) {
                         console.log(e, 'Link error catched')
@@ -700,17 +704,47 @@
                     }
                     
                 }
+
+            // for (i = 0; i < feed.length; i++) {
+            //     let dscr = response.results[i].description
+            //     feed_txt[i].innerHTML = `${dscr}`
+            //     if (response.results[i].image_url == null) {
+            //         feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+            //         console.log('No link found')
+            //     } else {
+            //         try { //try catch dose not work
+            //             feed_img[i].setAttribute('src', response.results[i].image_url)
+            //             console.log('Link found')
+            //         } catch (e) {
+            //             console.log(e, 'Link error catched')
+            //             feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+            //         }
+                    
+            //     }
                 // if (response.results[i].image_url == null) {
                 //     feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
                 // }
                 // else {
-                //     console.log("Image embbeded")
+                //     console.log("Image embbededi")
                 //     feed_img[i].setAttribute('src', response.results[i].image_url)
                 // }
             }
         }).catch(err => {
-            console.log(err)
+            console.log("whole fetch error :: ", err)
         })
+
+        // API2 building
+        // let API2 = fetch("/news")
+        // API2.then((res)=>{
+        //     return res.json()
+        // }).then((res2)=>{
+        //     console.log("Build log --> ", res2.news)
+        //     let arr = res2.news
+        //     arr.forEach(element => {
+        //         console.log(element.description, element.urlToImage)
+        //     }); 
+        //     // let newsPacket = res2.news[0]
+        // })
 
     </script>
 

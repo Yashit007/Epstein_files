@@ -11,6 +11,19 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Voter_Sathi_Final.html'));
 });
+
+app.get("/news", async(req, response)=>{
+  try {
+    const res = await fetch("https://news.knowivate.com/api/latest")
+    const Jhonson = await res.json()
+    console.log("Got the response from news api")
+    response.json(Jhonson)
+  } catch (error) {
+    response.status(500).json({error: "Error caused by backend server fetch faliure. Try refreshing the page"})
+
+  }
+})
+
 app.get('')
 // Start server
 app.listen(port, () => {
