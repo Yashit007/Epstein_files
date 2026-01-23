@@ -674,7 +674,7 @@
         let err_box = document.getElementById("messages")
 
         // let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
-        // let API = fetch("/news")
+        let API = fetch("/news")
         let status;
         API.then(response => {
             status = response.status
