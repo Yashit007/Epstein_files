@@ -111,7 +111,7 @@
        display: grid;
        grid-template-columns: 1.5fr 4fr;
        padding: 8px 0px;
-       height: 800px;
+       height: 7    00px;
        background-color: rgb(240, 240, 240);
 
        /* Glass effect */
@@ -133,7 +133,7 @@
    }
 
    #ht-tic-hd {
-       margin-top: 10px;
+       margin: 20px 10px;
        font-weight: bold;
        font-size: 40px;
        background: linear-gradient(45deg, #ff6600, #ff0000);
@@ -145,7 +145,7 @@
 
    .ht-tic {
        display: block;
-       margin: 20px 0px;
+       margin: 10px 0px;
        background-color: rgb(255, 255, 255);
        color: #000;
        font-size: 20px;
@@ -197,6 +197,7 @@
        flex-wrap: wrap;
        padding: 8px;
        overflow: scroll;
+       height: 700px;
    }
 
    /* Hide scrollbar for Chrome, Safari and Opera */
@@ -244,9 +245,9 @@
        margin: 10px 4px;
        margin-top: 15px;
        color: rgb(0, 0, 0);
-       font-size: 17px;
+       font-size: 1.1rem;
        height: 150px;
-       overflow: hidden;
+       /* overflow: scroll; */
    }
 
    .fed-tl {
@@ -555,9 +556,31 @@ hr {
     }
 }
 
-   @media screen and (max-width:911px) {
-       #vtr-grd {
+   @media screen and (max-width:973px) {
+       /* #vtr-grd {
            display: flex;
            flex-direction: column;
-       }
-   }
+       } */
+        #vtr-prof{
+            flex-direction: column;
+        }
+        #Menu{
+            display: none;
+        }
+        #Nav{
+            justify-content: space-between; 
+        }
+    }
+    @media screen and (max-width:916px) {
+        #vtr-grd {
+            display: flex;
+            flex-direction: column;
+        }
+        #pg-img{
+            visibility: hidden;
+            display: none;
+        }
+        #vtr-mid-grd {
+           height: 23rem;
+        }
+    }    
