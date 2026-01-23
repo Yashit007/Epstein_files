@@ -38,7 +38,7 @@
        cursor: pointer;
        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
        font-size: 20px;
-       margin: 0px 30px;
+       margin: 0px 10px;
        color: #000000;
        text-decoration: none;
    }
@@ -581,6 +581,6 @@ hr {
             display: none;
         }
         #vtr-mid-grd {
-           height: 23rem;
+           height: 38rem;
         }
     }    
