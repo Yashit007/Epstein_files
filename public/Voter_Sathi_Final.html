@@ -26,16 +26,14 @@
                     <span><a class="Item" href="#">Peoples Voice</a></span>
                     <span><a class="Item" href="#">Contact</a></span>
                 </div>
-                <div style="border: 1px solid black;"></div>
+                <!-- <div style="border: 1px solid black;"></div> -->
                 <button id="Tbl-launch" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                        class="bi bi-menu-button-wide" viewBox="0 0 16 16">
-                        <path
-                            d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v2A1.5 1.5 0 0 1 14.5 5h-13A1.5 1.5 0 0 1 0 3.5zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z" />
-                        <path
-                            d="M2 2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m10.823.323-.396-.396A.25.25 0 0 1 12.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5" />
+                        class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                     </svg>
 
                 </button>
@@ -51,10 +49,16 @@
             </div>
         </div>
         <div id="messages">
-            <div class="alert alert-primary alert-dismissible fade show m-3" role="alert">
-                <strong><a href class="Item"> Visit report &#8594 </a> </strong>
+            <div class="alert alert-primary alert-dismissible fade show m-1 p-2 fs-6" role="alert">
+                <button type="button" class="btn-close p-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong><a href class="Item fs-5 m-1"> Visit report &#8594 </a> </strong>
                 Todays Prediction : Wll BJP win the 2024 elections.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="fs-6 alert alert-danger alert-dismissible fade show m-1 p-2" role="alert">
+                <button type="button" class="btn-close p-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong class="fs-5">FEED ERROR :( </strong> Cause: ${response.error} [ status code: ${status} ] <button
+                    style="color: blue; margin-left: 2px; text-decoration: underline;" type="button"
+                    onclick="location.reload()">Refresh page</button>
             </div>
         </div>
 
@@ -670,7 +674,7 @@
         let err_box = document.getElementById("messages")
 
         // let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
-        let API = fetch("/news")
+        // let API = fetch("/news")
         let status;
         API.then(response => {
             status = response.status
@@ -702,25 +706,25 @@
                         console.log(e, 'Link error catched')
                         feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
                     }
-                    
+
                 }
 
-            // for (i = 0; i < feed.length; i++) {
-            //     let dscr = response.results[i].description
-            //     feed_txt[i].innerHTML = `${dscr}`
-            //     if (response.results[i].image_url == null) {
-            //         feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
-            //         console.log('No link found')
-            //     } else {
-            //         try { //try catch dose not work
-            //             feed_img[i].setAttribute('src', response.results[i].image_url)
-            //             console.log('Link found')
-            //         } catch (e) {
-            //             console.log(e, 'Link error catched')
-            //             feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
-            //         }
-                    
-            //     }
+                // for (i = 0; i < feed.length; i++) {
+                //     let dscr = response.results[i].description
+                //     feed_txt[i].innerHTML = `${dscr}`
+                //     if (response.results[i].image_url == null) {
+                //         feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                //         console.log('No link found')
+                //     } else {
+                //         try { //try catch dose not work
+                //             feed_img[i].setAttribute('src', response.results[i].image_url)
+                //             console.log('Link found')
+                //         } catch (e) {
+                //             console.log(e, 'Link error catched')
+                //             feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
+                //         }
+
+                //     }
                 // if (response.results[i].image_url == null) {
                 //     feed_img[i].setAttribute('src', 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7')
                 // }
@@ -742,7 +746,7 @@
         //     let arr = res2.news
         //     arr.forEach(element => {
         //         console.log(element.description, element.urlToImage)
-        //     }); 
+        //     });
         //     // let newsPacket = res2.news[0]
         // })
 
