@@ -5,8 +5,6 @@ import path from 'path'
 // fs.
 import MongoClient  from 'mongodb'
 
-const connec = new MongoClient('mongodb+srv://Britys_kitten:hMivEgrBBRKndDti@cluster0.fe9c94p.mongodb.net/?appName=Cluster0')
-
 const app = express()
 const port = 3000
 
