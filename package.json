@@ -2,11 +2,15 @@
   "dependencies": {
     "express": "^5.2.1",
     "gh": "^1.13.9",
-    "nodemon": "^3.1.11"
+    "mongodb": "^7.0.0",
+    "moongose": "^1.0.0",
+    "nodemon": "^3.1.11",
+    "website": "^0.1.1"
   },
   "name": "vs_files_epstein",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

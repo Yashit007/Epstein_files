@@ -1,5 +1,11 @@
-const express = require('express')
-const path = require('path')
+import express from 'express';
+
+import path from 'path'
+// const fs = require('fs')
+// fs.
+import MongoClient  from 'mongodb'
+
+const connec = new MongoClient('mongodb+srv://Britys_kitten:hMivEgrBBRKndDti@cluster0.fe9c94p.mongodb.net/?appName=Cluster0')
 
 const app = express()
 const port = 3000
