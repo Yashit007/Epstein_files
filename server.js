@@ -1,19 +1,32 @@
 import express from 'express';
 
-import path from 'path'
+import { fileURLToPath } from "url"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 // const fs = require('fs')
 // fs.
 import MongoClient  from 'mongodb'
+import path from 'path';
 
 const app = express()
 const port = 3000
+
+// Take notes brother hehehe :)
+// | Step              | What it does                 |
+// | ----------------- | ---------------------------- |
+// | `import.meta.url` | Gives file location as a URL |
+// | `fileURLToPath()` | Converts URL → real path     |
+// | `path.dirname()`  | Gets the folder path         |
+
 
 // Serve static files from 'public' directory
 app.use(express.static('public'));
 
 // Route for home page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Voter_Sathi_Final.html'));
+  res.sendFile(path.join(__dirname, "public/Jenny.html"))
 });
 
 app.get("/news", async(req, response)=>{
