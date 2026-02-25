@@ -1,17 +1,24 @@
 import express from 'express';
-
+import dontenv from "dotenv";
 import { fileURLToPath } from "url"
+import {MongoClient}  from 'mongodb'
+import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// const fs = require('fs')
-// fs.
-import MongoClient  from 'mongodb'
-import path from 'path';
+dontenv.config()
+const Env_obj = process.env
+
 
 const app = express()
-const port = 3000
+app.use(express.static('public')); // Serve static files from 'public' directory
+
+// ENV use for port and mongoDB connection
+const port = Env_obj.PORT || 3000
+const MONGO_URI = Env_obj.MONGO_URI
+const client = new MongoClient(MONGO_URI)
+
 
 // Take notes brother hehehe :)
 // | Step              | What it does                 |
@@ -20,12 +27,7 @@ const port = 3000
 // | `fileURLToPath()` | Converts URL → real path     |
 // | `path.dirname()`  | Gets the folder path         |
 
-
-// Serve static files from 'public' directory
-app.use(express.static('public'));
-
-// Route for home page
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { // Route for home page
   res.sendFile(path.join(__dirname, "public/Jenny.html"))
 });
 
