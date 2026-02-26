@@ -1,23 +1,23 @@
 import express from 'express';
-import dontenv from "dotenv";
+import dotenv from "dotenv/config";
 import { fileURLToPath } from "url"
-import {MongoClient}  from 'mongodb'
 import path from 'path';
+import connectDB, { getDB } from './db/conneciton.js';
 
-const __filename = fileURLToPath(import.meta.url)
+const __filename = fileURLToPath(import.meta.url) // Dir name assignment to script
 const __dirname = path.dirname(__filename)
 
-dontenv.config()
-const Env_obj = process.env
 
+const Env_obj = process.env // injecting .env
+const port = Env_obj.PORT || 3000
+const MONGO_URI = Env_obj.MONGO_URI
+
+await connectDB() // initiate connection to db
 
 const app = express()
 app.use(express.static('public')); // Serve static files from 'public' directory
 
 // ENV use for port and mongoDB connection
-const port = Env_obj.PORT || 3000
-const MONGO_URI = Env_obj.MONGO_URI
-const client = new MongoClient(MONGO_URI)
 
 
 // Take notes brother hehehe :)
@@ -28,10 +28,27 @@ const client = new MongoClient(MONGO_URI)
 // | `path.dirname()`  | Gets the folder path         |
 
 app.get('/', (req, res) => { // Route for home page
+  // const db = getDB()
   res.sendFile(path.join(__dirname, "public/Jenny.html"))
+  // const status = db.collection('test_collection').insertOne({
+  //   test1:10,
+  //   test2:'string',
+  //   test3:true
+  // })
 });
 
-app.get("/news", async(req, response)=>{
+app.get('/testdb', async (req, res)=>{
+  const db = getDB()
+  const status = await db.collection('test_collection').insertOne({
+    test1:10,
+    test2:'string',
+    test3:true
+  })
+  console.log(status)
+  res.json({db_operation_status: status})
+})
+
+app.get("/news", async(req, response)=>{ // API calls for news
   try {
     const res = await fetch("https://news.knowivate.com/api/latest")
     const Jhonson = await res.json()
@@ -43,7 +60,7 @@ app.get("/news", async(req, response)=>{
   }
 })
 
-app.get('')
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

@@ -15,6 +15,7 @@
 
 <body>
     <h3 style="text-align: center;">Website under development</h3>
+    <h2 style="text-align: center;" id="tstDB">Test db</h2>
     <div id="Vtr-main">
         <div id="bg-black">
             <nav id="Nav">
@@ -707,6 +708,14 @@
         let feed_txt = document.getElementsByClassName("fed-dscr")
         let feed_img = document.getElementsByClassName("fed-img")
         let err_box = document.getElementById("messages")
+        let tstDB_btn = document.getElementById("tstDB")
+
+        tstDB_btn.addEventListener('click', ()=>{
+           let test_db_api = fetch('/testdb')
+           test_db_api.then(res=>{
+            console.log(res)
+           })
+        })
 
         // let API = fetch("https://newsdata.io/api/1/news?apikey=pub_370454307719bb1e02cd66c974148dd5a2dda&country=in&language=en&category=politics")
         let API = fetch("/news")
