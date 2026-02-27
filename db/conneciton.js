@@ -22,6 +22,7 @@ const connectDB = async ()=>{
     } catch (error) {
         console.log('DB_Connection.js LOG --> ', 'connection failed', error)
         // process.exit(1) // crashes the server if DB fails to connect
+        throw new Error('DB_connection.js LOG --> Mongo CLient coudnt connect to DB')
     }
 }
 

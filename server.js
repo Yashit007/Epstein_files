@@ -48,7 +48,7 @@ app.get('/testdb_Uname', async (req, res) => {
     await connectDB()
     var db = getDB() // connection test
     const status = await db.collection('test_collection').insertOne({ // Test data dispatch
-      Time:`Date(DD/MM/YYYY):${Day}/${Mon}/${Year} Time: ${Hour}:${Min}:${Sec}`,
+      Time: `Date(DD/MM/YYYY):${Day}/${Mon}/${Year} Time: ${Hour}:${Min}:${Sec}`,
       User_Name: User_NameB
     })
     var connec_status_DB = true
@@ -72,14 +72,14 @@ app.get('/testdb_Uname', async (req, res) => {
 
 })
 
-app.get('/testdb', async (req, res)=>{
-  try {
-    await connectDB()
-    console.log('DEBUG LOG --> Backend DB connect succesfull')
-    res.json({status_connec:true,  err_msg:'Ma smart ass'})
-  } catch (error) {
-    res.json({status_connec:false,  err_msg:error})
-  }
+app.get('/testdb', (req, res) => {
+  connectDB().then((resp) => {
+    console.log('SERVER LOG--> in the true block')
+    res.json({ status_connec: true, err_msg: null})
+  }).catch((err) => {
+    console.log('SERVER LOG--> in the false block')
+    res.json({ status_connec: false, err_msg: err })
+  })
 })
 
 app.get("/news", async (req, response) => { // API calls for news
