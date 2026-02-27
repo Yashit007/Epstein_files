@@ -28,40 +28,73 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 // | `path.dirname()`  | Gets the folder path         |
 
 app.get('/', (req, res) => { // Route for home page
-  // const db = getDB()
   res.sendFile(path.join(__dirname, "public/Jenny.html"))
-  // const status = db.collection('test_collection').insertOne({
-  //   test1:10,
-  //   test2:'string',
-  //   test3:true
-  // })
 });
 
-app.get('/testdb', async (req, res)=>{
-  const db = getDB()
-  const status = await db.collection('test_collection').insertOne({
-    test1:10,
-    test2:'string',
-    test3:true
-  })
-  console.log(status)
-  res.json({db_operation_status: status})
+app.get('/testdb_Uname', async (req, res) => {
+
+  let date = new Date()    // Time stamp
+  let Year = String(date.getFullYear())
+  let Mon = String(date.getMonth() + 1).padStart(2, '0')
+  let Day = String(date.getDate()).padStart(2, 0)
+  let Hour = String(date.getHours()).padStart(2, '0')
+  let Min = String(date.getMinutes()).padStart(2, '0')
+  let Sec = String(date.getSeconds()).padStart(2, '0')
+
+  let User_NameB = req.query.User_NameF // UserName collection
+  console.log('SERVER DEBUG LOG --> ', User_NameB)
+
+  try {
+    await connectDB()
+    var db = getDB() // connection test
+    const status = await db.collection('test_collection').insertOne({ // Test data dispatch
+      Time:`Date(DD/MM/YYYY):${Day}/${Mon}/${Year} Time: ${Hour}:${Min}:${Sec}`,
+      User_Name: User_NameB
+    })
+    var connec_status_DB = true
+    var cem = 'Dispatch succesfull'
+    console.log('SERVER LOG--> ', status)
+  } catch (error) {
+    var connec_status_DB = false
+    var cem = String(error)
+  }
+
+  console.log('SERVER LOG --> ', cem)
+
+  const Res_Obj = {
+    DB_connection_status: {
+      connec_status: connec_status_DB,
+      connec_err_msg: cem
+    }
+  }
+
+  res.json(Res_Obj)
+
 })
 
-app.get("/news", async(req, response)=>{ // API calls for news
+app.get('/testdb', async (req, res)=>{
+  try {
+    await connectDB()
+    console.log('DEBUG LOG --> Backend DB connect succesfull')
+    res.json({status_connec:true,  err_msg:'Ma smart ass'})
+  } catch (error) {
+    res.json({status_connec:false,  err_msg:error})
+  }
+})
+
+app.get("/news", async (req, response) => { // API calls for news
   try {
     const res = await fetch("https://news.knowivate.com/api/latest")
     const Jhonson = await res.json()
-    console.log("Got the response from news api")
+    console.log('SERVER LOG --> ', "Got the response from news api")
     response.json(Jhonson)
   } catch (error) {
-    response.status(500).json({error: "Error caused by backend server fetch faliure. Try refreshing the page"})
-
+    response.status(500).json({ error: "Error caused by backend server fetch faliure. Try refreshing the page" })
   }
 })
 
 
 // Start server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log('SERVER LOG --> ', `Server running on http://localhost:${port}`);
 });
