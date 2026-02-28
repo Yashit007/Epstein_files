@@ -27,6 +27,12 @@ app.use(express.static('public')); // Serve static files from 'public' directory
 // | `fileURLToPath()` | Converts URL → real path     |
 // | `path.dirname()`  | Gets the folder path         |
 
+// HTTP response header to allow pae indexing
+app.use((req, res, next) => {
+  res.set("X-Robots-Tag", "index, follow");
+  next();
+});
+
 app.get('/', (req, res) => { // Route for home page
   res.sendFile(path.join(__dirname, "public/Jenny.html"))
 });
