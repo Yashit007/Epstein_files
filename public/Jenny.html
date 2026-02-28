@@ -4,24 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoterSaathi -By ISC of MPS</title>
+    <title>VoterSaathi - Political Platform by ISC of MPS</title>
+    <meta name="description"
+        content="Votersaathi website is focused on providing unbiased political content and social media for opinion expression. Developed my ISC council of Maharashtra Public School (MPS)">
     <link rel="stylesheet" href="./VoterSathi.css">
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="icon" href="favicon.ico">
+    <meta property="og:title" content="PingDB">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://votersaathi.com">
+    <meta property="og:image" content="./VOTER SAATHI 2.png">
 </head>
 
 <body>
     <h3 style="text-align: center;">Website under development</h3>
 
-
     <div id="Vtr-main">
         <div id="bg-black">
             <nav id="Nav">
-                <div id="logo"><img src="./VOTER SAATHI 2.png   " alt="logo" id="rec_logo"><span id="logo-txt">Voter
-                        Sathi</span></div>
+                <div id="logo"><img src="./VOTER SAATHI 2.png   " alt="logo of votersaathi website" id="rec_logo">
+                    <h1 id="logo-txt">Voter
+                        Sathi</h1>
+                </div>
                 <div id="Menu">
                     <span><a class="Item" href="#">Political analysis</a></span>
                     <span><a class="Item" href="#">Latest</a></span>
@@ -785,7 +793,7 @@
             tstDB_btn.classList.add('tstDB-scaled')
             console.log('DEBUG LOG1 --> Connecting to DB')
             db_ready_prest()
-            
+
             //preset logic
             let Db_tst_api = fetch('/testdb')
             Db_tst_api.then((res) => {
