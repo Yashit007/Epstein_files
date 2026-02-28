@@ -13,39 +13,45 @@
        align-items: center;
        cursor: pointer;
        border-radius: 100px;
-       /* border: 1px solid rgb(61, 61, 61); */
+       border: 2px solid rgb(190, 190, 190);
        background-color: rgb(0, 0, 0);
        width: clamp(20px, 60px, 90px);
        aspect-ratio: 1;
        flex-direction: column;
        position: fixed;
-       right: 1%;
-       bottom: 1%;
+       right: 2%;
+       bottom: 2%;
        z-index: 10;
-       transition: 0.25s;
+       transition: 0.75s ease-out;
        touch-action: none;
        user-select: none;
+       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
    }
 
-#tstDB:hover {
-  transform: scale(1.03);
+ #tstDB:hover{ /* specificity score problem was encountered here */
+  transform: scale(1.05);
 }
 
-   #tdb_svg {
+#tstDB.tstDB-scaled{
+    transform: scale(3);
+    bottom: 5%;
+    right: 3%;
+}
 
-   }
+#tdb_svg {
+
+}
 
    .tst_svg {
-    
-   }
+}
 
-   .tst_svg_fail{
+.tst_svg_fail{
     fill: rgb(255, 93, 39);
-   }
-   .tst_svg_connected{
+}
+.tst_svg_connected{
     fill: rgb(0, 255, 0);
-   }
-   .tst_svg_ready{
+}
+.tst_svg_ready{
     fill: rgb(255, 255, 255);
    }
 
