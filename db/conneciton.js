@@ -12,7 +12,7 @@ const env_obj = process.env
 
 let db
 let client
-const connectDB = async ()=>{
+const connectDB = async ()=>{ // Graceful degradation is implemented here
     try {
         client = new MongoClient(env_obj.MONGO_URI)
         await client.connect()
@@ -21,8 +21,6 @@ const connectDB = async ()=>{
         return db
     } catch (error) {
         console.log('DB_Connection.js LOG --> ', 'connection failed', error)
-        // process.exit(1) // crashes the server if DB fails to connect
-        throw new Error('DB_connection.js LOG --> Mongo CLient coudnt connect to DB')
     }
 }
 

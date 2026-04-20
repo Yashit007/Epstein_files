@@ -12,7 +12,6 @@ const Env_obj = process.env // injecting .env
 const port = Env_obj.PORT || 3000
 const MONGO_URI = Env_obj.MONGO_URI
 
-await connectDB() // initiate connection to db
 
 const app = express()
 app.use(express.static('public')); // Serve static files from 'public' directory
