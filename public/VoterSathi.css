@@ -241,7 +241,7 @@ body {
 }
 
 #messages {
-    z-index: 1;
+    z-index: 10;
     position: sticky;
     top: 5px;
     left: 0;
@@ -410,27 +410,53 @@ body {
 }
 
 .fed-tl {
-    background-color: #f4f5f9;
-    border-radius: 8px;
+    background-color: #ededf2;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 8px;
-    margin-top: 10px;
+    justify-content: space-between; /* Pushes content to the edges */
+    padding: 10px 14px;
+    margin-top: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .fed-tl:hover {
+    cursor: default;
+}
+
+.fed-lik-container, .fed-vew-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.fed-lik-container {
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.fed-lik-container:hover {
+    transform: scale(1.05);
 }
 
 .fed-lik {
     transition: all 0.25s;
-    color: #8888a0;
+    color: #33334d;
+}
+
+.fed-lik-count, .fed-vew-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #33334d;
+}
+
+.fed-vew-count {
+    color: #666680; /* Slightly lighter for views */
 }
 
 .fed-comt {
-    transition: all 0.25s;
-    color: #8888a0;
+    display: none;
 }
 
 .fed-vew {
@@ -439,12 +465,6 @@ body {
 
 .fed-lik:hover {
     color: #e8654a;
-    transform: scale(1.15);
-}
-
-.fed-comt:hover {
-    color: #5a7ea5;
-    transform: scale(1.15);
 }
 
 /* Read more */
@@ -825,6 +845,17 @@ hr .new1 {
         padding: 30px 20px;
         min-height: 250px;
     }
+
+    #form-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    #form-box strong {
+        font-size: 1rem !important;
+        text-align: center;
+    }
 }
 
 /* Mobile — single column */
@@ -863,6 +894,14 @@ hr .new1 {
         width: 100%;
         max-width: 400px;
     }
+
+    #messages .alert {
+        font-size: 13px !important;
+    }
+
+    #messages .alert strong a {
+        font-size: 1rem !important;
+    }
 }
 
 /* Small phones */
@@ -895,7 +934,16 @@ hr .new1 {
     }
 
     #form-box {
-        flex-wrap: wrap;
+        padding: 12px;
+    }
+
+    #U_name, #U-name-btn {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    #messages .alert {
+        padding-right: 35px !important;
     }
 }
 
