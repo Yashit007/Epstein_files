@@ -4,100 +4,88 @@ import { fileURLToPath } from "url"
 import path from 'path';
 import connectDB, { getDB } from './db/conneciton.js';
 
-const __filename = fileURLToPath(import.meta.url) // Dir name assignment to script
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url); // Get current file path as URL
+const __dirname = path.dirname(__filename);        // Extract directory path
 
+const Env_obj = process.env; // Load environment variables
+const port = Env_obj.PORT || 3000;                 // Server port (default 3000)
+const MONGO_URI = Env_obj.MONGO_URI;               // MongoDB connection string
 
-const Env_obj = process.env // injecting .env
-const port = Env_obj.PORT || 3000
-const MONGO_URI = Env_obj.MONGO_URI
-
-
-const app = express()
+const app = express();
 app.use(express.static('public')); // Serve static files from 'public' directory
 
-// ENV use for port and mongoDB connection
-
-
-// Take notes brother hehehe :)
-// | Step              | What it does                 |
-// | ----------------- | ---------------------------- |
-// | `import.meta.url` | Gives file location as a URL |
-// | `fileURLToPath()` | Converts URL → real path     |
-// | `path.dirname()`  | Gets the folder path         |
-
-// HTTP response header to allow pae indexing
+// Add X-Robots-Tag header to allow search engine indexing
 app.use((req, res, next) => {
   res.set("X-Robots-Tag", "index, follow");
   next();
 });
 
-app.get('/', (req, res) => { // Route for home page
-  res.sendFile(path.join(__dirname, "public/Jenny.html"))
+// Home route - serves the main landing page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, "public/Jenny.html"));
 });
 
+// POST /testdb_Uname - Insert username with timestamp into MongoDB
 app.get('/testdb_Uname', async (req, res) => {
+  const now = new Date();
+  const timestamp = now.toLocaleString('en-GB', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false
+  }).replace(',', '');
 
-  let date = new Date()    // Time stamp
-  let Year = String(date.getFullYear())
-  let Mon = String(date.getMonth() + 1).padStart(2, '0')
-  let Day = String(date.getDate()).padStart(2, 0)
-  let Hour = String(date.getHours()).padStart(2, '0')
-  let Min = String(date.getMinutes()).padStart(2, '0')
-  let Sec = String(date.getSeconds()).padStart(2, '0')
-
-  let User_NameB = req.query.User_NameF // UserName collection
-  console.log('SERVER DEBUG LOG --> ', User_NameB)
+  const userName = req.query.User_NameF;
+  console.log('SERVER DEBUG LOG --> ', userName);
 
   try {
-    await connectDB()
-    var db = getDB() // connection test
-    const status = await db.collection('test_collection').insertOne({ // Test data dispatch
-      Time: `Date(DD/MM/YYYY):${Day}/${Mon}/${Year} Time: ${Hour}:${Min}:${Sec}`,
-      User_Name: User_NameB
-    })
-    var connec_status_DB = true
-    var cem = 'Dispatch succesfull'
-    console.log('SERVER LOG--> ', status)
+    await connectDB();
+    const db = getDB();
+    const result = await db.collection('test_collection').insertOne({
+      Time: `Date(DD/MM/YYYY) ${timestamp}`,
+      User_Name: userName
+    });
+    console.log('SERVER LOG --> ', result);
+    return res.json({
+      DB_connection_status: {
+        connec_status: true,
+        connec_err_msg: 'Dispatch successful'
+      }
+    });
   } catch (error) {
-    var connec_status_DB = false
-    var cem = String(error)
+    console.error('SERVER ERROR --> ', error);
+    return res.json({
+      DB_connection_status: {
+        connec_status: false,
+        connec_err_msg: error.message
+      }
+    });
   }
+});
 
-  console.log('SERVER LOG --> ', cem)
-
-  const Res_Obj = {
-    DB_connection_status: {
-      connec_status: connec_status_DB,
-      connec_err_msg: cem
-    }
-  }
-
-  res.json(Res_Obj)
-
-})
-
-app.get('/testdb', (req, res) => {
-  connectDB().then((resp) => {
-    console.log('SERVER LOG--> in the true block')
-    res.json({ status_connec: true, err_msg: null})
-  }).catch((err) => {
-    console.log('SERVER LOG--> in the false block')
-    res.json({ status_connec: false, err_msg: err })
-  })
-})
-
-app.get("/news", async (req, response) => { // API calls for news
+// GET /testdb - Simple MongoDB connection health check
+app.get('/testdb', async (req, res) => {
   try {
-    const res = await fetch("https://news.knowivate.com/api/latest")
-    const Jhonson = await res.json()
-    console.log('SERVER LOG --> ', "Got the response from news api")
-    response.json(Jhonson)
-  } catch (error) {
-    response.status(500).json({ error: "Error caused by backend server fetch faliure. Try refreshing the page" })
+    await connectDB();
+    console.log('SERVER LOG --> DB connection successful');
+    res.json({ status_connec: true, err_msg: null });
+  } catch (err) {
+    console.error('SERVER LOG --> DB connection failed:', err);
+    res.json({ status_connec: false, err_msg: err.message });
   }
-})
+});
 
+// GET /news - Proxy fetch from external news API
+app.get("/news", async (req, res) => {
+  try {
+    const response = await fetch("https://news.knowivate.com/api/latest");
+    const data = await response.json();
+    console.log('SERVER LOG --> ', "Fetched news from external API");
+    res.json(data);
+  } catch (error) {
+    console.error('SERVER ERROR --> News fetch failed:', error);
+    res.status(500).json({ error: "Failed to fetch news. Please try again later." });
+  }
+});
 
 // Start server
 app.listen(port, () => {

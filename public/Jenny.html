@@ -740,96 +740,108 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
-    <!--Ownscript-->
-    <script>
-        let feed = document.getElementsByClassName("vtr-mid-grd-fed")
-        let feed_txt = document.getElementsByClassName("fed-dscr")
-        let feed_img = document.getElementsByClassName("fed-img")
-        let err_box = document.getElementById("messages")
+    <!-- Own Script -->
+        <script>
+          // Element references
+          const feed = document.getElementsByClassName("vtr-mid-grd-fed");
+          const feedTxt = document.getElementsByClassName("fed-dscr");
+          const feedImg = document.getElementsByClassName("fed-img");
+          const errBox = document.getElementById("messages");
 
-        // tst DB script
-        let tstDB_btn = document.getElementById("tstDB")
-        let tst_svg_box = document.getElementById('tdb_svg')
+          // DB test elements
+          const tstDBBtn = document.getElementById("tstDB");
+          const tstSvgBox = document.getElementById('tdb_svg');
 
-        let db_ready_prest = () => {
-            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'none'
-            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'inline'
-            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'none'
-        }
-        let db_fail_prest = () => {
-            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'inline'
-            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'none'
-            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'none'
-        }
-        let db_connected_prest = () => {
-            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'none'
-            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'none'
-            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'inline'
-        }
+          // DB status SVG toggles
+          const setDBReady = () => {
+            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'none';
+            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'inline';
+            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'none';
+          };
+          const setDBFail = () => {
+            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'inline';
+            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'none';
+            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'none';
+          };
+          const setDBConnected = () => {
+            document.getElementsByClassName('tst_svg_fail')[0].style.display = 'none';
+            document.getElementsByClassName('tst_svg_ready')[0].style.display = 'none';
+            document.getElementsByClassName('tst_svg_connected')[0].style.display = 'inline';
+          };
 
-        db_ready_prest()
+          setDBReady();
 
-        let holdTime = 7000
-        let timer;
-        let preset = false;
+          // Long-press handler for DB test button
+          const HOLD_TIME = 7000;
+          let holdTimerId;
+          let dbStatus = false;
 
-        let holdTimer = () => {
-            tstDB_btn.classList.add('tstDB-scaled')
-            db_ready_prest()
+          const startHold = () => {
+            tstDBBtn.classList.add('tstDB-scaled');
+            setDBReady();
 
-            fetch('/testdb').then((res) => res.json()).then((data) => {
-                preset = data.status_connec
+            fetch('/testdb')
+              .then(res => res.json())
+              .then(data => { dbStatus = data.status_connec; });
+
+            holdTimerId = setTimeout(() => {
+              tstDBBtn.classList.remove('tstDB-scaled');
+              dbStatus ? setDBConnected() : setDBFail();
+            }, HOLD_TIME);
+          };
+
+          const cancelHold = () => {
+            clearTimeout(holdTimerId);
+            tstDBBtn.classList.remove('tstDB-scaled');
+          };
+
+          tstDBBtn.addEventListener("pointerdown", startHold);
+          tstDBBtn.addEventListener("pointerup", cancelHold);
+          tstDBBtn.addEventListener("pointerleave", cancelHold);
+          tstDBBtn.addEventListener("pointercancel", cancelHold);
+
+          // Dispatch username to DB
+          const dispatchUsername = () => {
+            const userName = document.getElementById('U_name').value;
+            fetch(`/testdb_Uname?User_NameF=${encodeURIComponent(userName)}`)
+              .then(res => res.json())
+              .then(data => console.log(data));
+          };
+
+          // Fetch and populate news feed
+          fetch("/news")
+            .then(response => {
+              if (response.status === 404) {
+                showError(`Server returned status ${response.status}. Please try again later.`);
+              }
+              return response.json();
             })
-
-            timer = setTimeout(() => {
-                tstDB_btn.classList.remove('tstDB-scaled')
-                if (preset == false) db_fail_prest()
-                else if (preset == true) db_connected_prest()
-            }, holdTime)
-        }
-
-        let cancelHold = () => {
-            clearTimeout(timer)
-            tstDB_btn.classList.remove('tstDB-scaled')
-        }
-
-        tstDB_btn.addEventListener("pointerdown", holdTimer);
-        tstDB_btn.addEventListener("pointerup", cancelHold);
-        tstDB_btn.addEventListener("pointerleave", cancelHold);
-        tstDB_btn.addEventListener("pointercancel", cancelHold);
-
-        let U_name_dispatch = () => {
-            let userName = document.getElementById('U_name').value
-            fetch(`/testdb_Uname?User_NameF=${userName}`).then(res => res.json()).then((data) => {
-                console.log(data)
+            .then(data => {
+              if (data.error) {
+                showError(data.error);
+                return;
+              }
+              for (let i = 0; i < feed.length && i < data.news.length; i++) {
+                feedTxt[i].innerHTML = data.news[i].description;
+                const imgUrl = data.news[i].urlToImage || 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7';
+                feedImg[i].setAttribute('src', imgUrl);
+              }
             })
-        }
+            .catch(err => console.error("Fetch error:", err));
 
-        fetch("/news").then(response => {
-            let status = response.status
-            if (status == 404) {
-                err_box.innerHTML += `<div class="fs-6 alert alert-danger alert-dismissible fade show m-1 p-2" role="alert">
+          // Helper to show dismissible error alerts
+          function showError(message) {
+            errBox.innerHTML += `
+              <div class="fs-6 alert alert-danger alert-dismissible fade show m-1 p-2" role="alert">
                 <button type="button" class="btn-close p-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong class="fs-5">FEED ERROR :( </strong> Cause: The server returned status ${status}. Please try again later.
+                <strong class="fs-5">FEED ERROR :( </strong> Cause: ${message}
                 <button style="color: #3b5998; margin-left: 6px; text-decoration: underline; background: none; border: none; cursor: pointer; font-weight: 600;" type="button" onclick="location.reload()">Refresh page</button>
-                </div>`
-            }
-            return response.json()
-        }).then(response => {
-            if (response.error) {
-                err_box.innerHTML += `<div class="fs-6 alert alert-danger alert-dismissible fade show m-1 p-2" role="alert">
-                <button type="button" class="btn-close p-0 m-2" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong class="fs-5">FEED ERROR :( </strong> Cause: ${response.error}
-                <button style="color: #3b5998; margin-left: 6px; text-decoration: underline; background: none; border: none; cursor: pointer; font-weight: 600;" type="button" onclick="location.reload()">Refresh page</button>
-                </div>`
-            }
-            for (let i = 0; i < feed.length && i < response.news.length; i++) {
-                feed_txt[i].innerHTML = response.news[i].description
-                let imgUrl = response.news[i].urlToImage || 'https://th.bing.com/th/id/OIP.MkL5wbXZbiY6vpYb_tZSfgHaE8?w=282&h=188&c=7&r=0&o=5&pid=1.7'
-                feed_img[i].setAttribute('src', imgUrl)
-            }
-        }).catch(err => console.log("Fetch error:", err))
-    </script>
-</body>
+              </div>`;
+          }
 
+          // Expose dispatchUsername globally for onclick handler
+          window.U_name_dispatch = dispatchUsername;
+        </script>
+    </body>
+    </html>
 </html>
